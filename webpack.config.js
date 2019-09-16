@@ -13,8 +13,8 @@ const production = process.env.NODE_ENV === "production";
 const libraryName = "OrbsBlocksPolling";
 const plugins = [];
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-plugins.push(new BundleAnalyzerPlugin());
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// plugins.push(new BundleAnalyzerPlugin());
 
 const webConfig = {
   target: "web",
