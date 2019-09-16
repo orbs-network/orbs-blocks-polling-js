@@ -10,7 +10,9 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "downlevelIteration": true,
+    "emitDeclarationOnly": true,
     "lib": ["esnext", "esnext.bigint"],
+    "types": []
   },
   "include": ["src/lib.ts", "src/types.d.ts"]
 }

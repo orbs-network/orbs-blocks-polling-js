@@ -10,8 +10,9 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && webpack -p && npm run types",
-    "types": "tsc --emitDeclarationOnly",
+    "build": "npm run clean && npm run build-webpack && npm run types",
+    "build-webpack": "webpack -p",
+    "types": "tsc -p tsconfig-for-types.json",
     "dev": "webpack-dev-server -w",
     "contracts": "./scripts/generate-contracts-abi.ts"
   },
