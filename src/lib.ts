@@ -1,3 +1,3 @@
 export * from './index';
-export { IOrbsBlocksPolling } from './IOrbsBlocksPolling';
+export { IOrbsBlocksPolling, INewBlocksHandler } from './IOrbsBlocksPolling';
 export { ILogger } from './ILogger';

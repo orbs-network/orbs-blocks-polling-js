@@ -3,6 +3,7 @@ import { GetBlockResponse } from 'orbs-client-sdk/dist/codec/OpGetBlock';
 
 export class OrbsBlocksPollingMock implements IOrbsBlocksPolling {
   private blockChain: GetBlockResponse[] = [];
+  private listeners: Map<INewBlocksHandler, INewBlocksHandler> = new Map();
 
   public async init(): Promise<void> {
     // nothing to do
@@ -13,15 +14,15 @@ export class OrbsBlocksPollingMock implements IOrbsBlocksPolling {
   }
 
   public RegisterToNewBlocks(handler: INewBlocksHandler): void {
-    // nothing to do
+    this.listeners.set(handler, handler);
   }
 
   public UnregisterFromNewBlocks(handler: INewBlocksHandler): void {
-    // nothing to do
+    this.listeners.delete(handler);
   }
 
   public dispose(): void {
-    // nothing to do
+    this.listeners = new Map();
   }
 
   public async getBlockAt(height: bigint): Promise<GetBlockResponse> {
@@ -35,5 +36,9 @@ export class OrbsBlocksPollingMock implements IOrbsBlocksPolling {
   // helper functions
   public setBlockChain(blockChain: GetBlockResponse[]): void {
     this.blockChain = blockChain;
+  }
+
+  public emitNewBlock(getBlockResponse: GetBlockResponse): void {
+    this.listeners.forEach(handler => handler.handleNewBlock(getBlockResponse));
   }
 }
