@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build-webpack && npm run types",
-    "build-webpack": "webpack -p",
+    "build-webpack": "cross-env NODE_ENV=production webpack -p",
     "types": "tsc -p tsconfig-for-declarations.json",
     "dev": "webpack-dev-server -w",
     "contracts": "./scripts/generate-contracts-abi.ts"
@@ -51,6 +51,7 @@
     "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
     "chalk": "^2.4.2",
+    "cross-env": "^6.0.3",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
