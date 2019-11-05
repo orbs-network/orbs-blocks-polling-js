@@ -1,7 +1,6 @@
 import { Client } from 'orbs-client-sdk';
 import { GetBlockResponse } from 'orbs-client-sdk/dist/codec/OpGetBlock';
-import { ILogger } from './ILogger';
-import { INewBlocksHandler, IOrbsBlocksPolling } from './IOrbsBlocksPolling';
+import { ILogger, INewBlocksHandler, IOrbsBlocksPolling } from './types';
 
 /**
  * Copyright 2019 the prism authors

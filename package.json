@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/orbs-blocks-polling.js",
   "browser": "dist/orbs-blocks-polling-web.js",
-  "types": "dist/lib.d.ts",
+  "types": "dist/declarations-index.d.ts",
   "files": [
     "dist"
   ],
@@ -12,7 +12,7 @@
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build-webpack && npm run types",
     "build-webpack": "webpack -p",
-    "types": "tsc -p tsconfig-for-types.json",
+    "types": "tsc -p tsconfig-for-declarations.json",
     "dev": "webpack-dev-server -w",
     "contracts": "./scripts/generate-contracts-abi.ts"
   },

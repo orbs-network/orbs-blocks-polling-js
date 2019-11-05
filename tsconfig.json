@@ -13,5 +13,5 @@
     "lib": ["esnext", "esnext.bigint"],
     "types": ["jest"]
   },
-  "include": ["src/index.ts", "src/__tests__/*.test.ts", "src/types.d.ts"]
+  "include": ["src/index.ts", "src/__tests__/*.test.ts", "src/globals.d.ts"]
 }

@@ -1,5 +1,5 @@
-import { IOrbsBlocksPolling, INewBlocksHandler } from '../IOrbsBlocksPolling';
 import { GetBlockResponse } from 'orbs-client-sdk/dist/codec/OpGetBlock';
+import { INewBlocksHandler, IOrbsBlocksPolling } from '../types';
 
 export class OrbsBlocksPollingMock implements IOrbsBlocksPolling {
   private blockChain: GetBlockResponse[] = [];
