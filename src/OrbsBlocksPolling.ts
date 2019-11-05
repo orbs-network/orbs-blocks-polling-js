@@ -16,25 +16,25 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
   private listeners: Map<INewBlocksHandler, INewBlocksHandler> = new Map();
   private timeoutId: any;
 
-  constructor(private logger: ILogger, private orbsClient: Client) {}
+  constructor(private orbsClient: Client, private logger?: ILogger) {}
 
   public async init(): Promise<void> {
-    this.logger.info('initializing OrbsAdapter');
+    this.logInfo('initializing OrbsAdapter');
     let initialized = false;
     while (!initialized) {
       try {
         this.latestKnownHeight = await this.getLatestKnownHeight();
         initialized = true;
       } catch (err) {
-        this.logger.warn(`Unable to initialize OrbsAdapter, retrying in 1sec. err: ${err}`);
+        this.logWarn(`Unable to initialize OrbsAdapter, retrying in 1sec. err: ${err}`);
         await sleep(1000);
       }
     }
-    this.logger.info('OrbsAdapter initialized');
+    this.logInfo('OrbsAdapter initialized');
   }
 
   public async initPooling(poolingInterval: number): Promise<void> {
-    this.logger.info('initializing the scheduler');
+    this.logInfo('initializing the scheduler');
     this.schedualNextRequest(poolingInterval);
   }
 
@@ -59,14 +59,14 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     if (getBlockResponse) {
       if (getBlockResponse.requestStatus === 'COMPLETED') {
         if (getBlockResponse.blockHeight === BigInt(0)) {
-          this.logger.error(
+          this.logError(
             'OrbsClient responded with requestStatus===completed, but blockheight===0, requested block was: ' +
               height.toString(),
           );
         }
         return getBlockResponse;
       } else {
-        this.logger.error(`OrbsClient responded with bad requestStatus`, {
+        this.logError(`OrbsClient responded with bad requestStatus`, {
           func: 'getBlockAt',
           requestStatus: getBlockResponse.requestStatus,
           requestedBlockHeight: height.toString(),
@@ -78,35 +78,35 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
   }
 
   public async getLatestKnownHeight(): Promise<bigint> {
-    this.logger.info(`Asking Orbs for the lastest height`);
+    this.logInfo(`Asking Orbs for the lastest height`);
     const getBlockResponse: GetBlockResponse = await this.orbsClient.getBlock(BigInt(0));
 
     if (typeof getBlockResponse.blockHeight !== 'bigint') {
       throw new Error(`orbsClient.getBlock(0n) returned with bad blockHeight`);
     }
 
-    this.logger.info(`Lastest height is ${getBlockResponse.blockHeight}`);
+    this.logInfo(`Lastest height is ${getBlockResponse.blockHeight}`);
     return getBlockResponse.blockHeight;
   }
 
   private async checkForNewBlocks(poolingInterval: number): Promise<void> {
     try {
       const nextHeight = this.latestKnownHeight + BigInt(1);
-      this.logger.info(`get block at => ${nextHeight}`);
+      this.logInfo(`get block at => ${nextHeight}`);
       const getBlockResponse = await this.getBlockWrapper(nextHeight, 'checkForNewBlocks');
       if (getBlockResponse) {
         const blockHeight: bigint = BigInt(getBlockResponse.blockHeight);
-        this.logger.info(`block height <= ${blockHeight}`);
+        this.logInfo(`block height <= ${blockHeight}`);
 
         if (blockHeight > this.latestKnownHeight) {
           this.listeners.forEach(handler => handler.handleNewBlock(getBlockResponse));
           this.latestKnownHeight = blockHeight;
         }
       } else {
-        this.logger.info(`bad response, ignoring`);
+        this.logInfo(`bad response, ignoring`);
       }
     } catch (err) {
-      this.logger.error(`checkForNewBlocks failed`, err);
+      this.logError(`checkForNewBlocks failed`, err);
     }
     this.schedualNextRequest(poolingInterval);
   }
@@ -116,7 +116,7 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     try {
       getBlockResponse = await this.orbsClient.getBlock(blockHeight);
     } catch (err) {
-      this.logger.error(`getBlock failed`, {
+      this.logError(`getBlock failed`, {
         func: 'getBlockWrapper',
         sourceMethod,
         err,
@@ -132,5 +132,23 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
 
   private schedualNextRequest(poolingInterval: number): void {
     this.timeoutId = setTimeout(() => this.checkForNewBlocks(poolingInterval), poolingInterval);
+  }
+
+  private logInfo(description: string, ...meta: any[]): void {
+    if (this.logger) {
+      this.logger.info(description, ...meta);
+    }
+  }
+
+  private logError(description: string, ...meta: any[]): void {
+    if (this.logger) {
+      this.logger.error(description, ...meta);
+    }
+  }
+
+  private logWarn(description: string, ...meta: any[]): void {
+    if (this.logger) {
+      this.logger.warn(description, ...meta);
+    }
   }
 }
