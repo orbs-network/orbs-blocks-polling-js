@@ -1,6 +1,6 @@
 {
   "name": "orbs-blocks-polling-js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "dist/orbs-blocks-polling.js",
   "browser": "dist/orbs-blocks-polling-web.js",
