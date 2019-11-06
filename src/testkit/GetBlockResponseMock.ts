@@ -2,6 +2,7 @@ import { BlockTransaction, GetBlockResponse, ResultsBlockHeader, TransactionsBlo
 import { RequestStatus } from 'orbs-client-sdk/dist/codec/RequestStatus';
 
 export class GetBlockResponseMock implements GetBlockResponse {
+  public requestStatus: RequestStatus = null;
   public blockTimestamp: Date;
   public transactionsBlockHash: Uint8Array = null;
   public transactionsBlockHeader: TransactionsBlockHeader = null;
@@ -9,7 +10,7 @@ export class GetBlockResponseMock implements GetBlockResponse {
   public resultsBlockHeader: ResultsBlockHeader = null;
   public transactions: BlockTransaction[] = [];
 
-  constructor(public blockHeight: bigint, public requestStatus: RequestStatus = RequestStatus.REQUEST_STATUS_COMPLETED) {
+  constructor(public blockHeight: bigint) {
     this.blockTimestamp =  new Date();
   }
 }
