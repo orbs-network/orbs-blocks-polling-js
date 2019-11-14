@@ -20,7 +20,7 @@ export interface INewBlocksHandler {
 
 export interface IOrbsBlocksPolling {
   init(): Promise<void>;
-  initPooling(poolingInterval: number): Promise<void>;
+  initPolling(pollingInterval: number): Promise<void>;
   RegisterToNewBlocks(handler: INewBlocksHandler): void;
   UnregisterFromNewBlocks(handler: INewBlocksHandler): void;
   dispose(): void;

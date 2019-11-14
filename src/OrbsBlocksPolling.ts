@@ -33,9 +33,9 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     this.logInfo('OrbsAdapter initialized');
   }
 
-  public async initPooling(poolingInterval: number): Promise<void> {
+  public async initPolling(pollingInterval: number): Promise<void> {
     this.logInfo('initializing the scheduler');
-    this.schedualNextRequest(poolingInterval);
+    this.schedualNextRequest(pollingInterval);
   }
 
   public RegisterToNewBlocks(handler: INewBlocksHandler): void {
@@ -89,7 +89,7 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     return getBlockResponse.blockHeight;
   }
 
-  private async checkForNewBlocks(poolingInterval: number): Promise<void> {
+  private async checkForNewBlocks(pollingInterval: number): Promise<void> {
     try {
       const nextHeight = this.latestKnownHeight + BigInt(1);
       this.logInfo(`get block at => ${nextHeight}`);
@@ -108,7 +108,7 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     } catch (err) {
       this.logError(`checkForNewBlocks failed`, err);
     }
-    this.schedualNextRequest(poolingInterval);
+    this.schedualNextRequest(pollingInterval);
   }
 
   private async getBlockWrapper(blockHeight: bigint, sourceMethod: string): Promise<GetBlockResponse> {
@@ -130,8 +130,8 @@ export class OrbsBlocksPolling implements IOrbsBlocksPolling {
     return getBlockResponse;
   }
 
-  private schedualNextRequest(poolingInterval: number): void {
-    this.timeoutId = setTimeout(() => this.checkForNewBlocks(poolingInterval), poolingInterval);
+  private schedualNextRequest(pollingInterval: number): void {
+    this.timeoutId = setTimeout(() => this.checkForNewBlocks(pollingInterval), pollingInterval);
   }
 
   private logInfo(description: string, ...meta: any[]): void {

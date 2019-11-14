@@ -9,7 +9,7 @@ export class OrbsBlocksPollingMock implements IOrbsBlocksPolling {
     // nothing to do
   }
 
-  public async initPooling(poolingInterval: number): Promise<void> {
+  public async initPolling(pollingInterval: number): Promise<void> {
     // nothing to do
   }
 
